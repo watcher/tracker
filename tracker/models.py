@@ -103,8 +103,8 @@ class Ticket(models.Model):
 	assigned_to = models.ForeignKey(User, related_name='assigned_to', blank=True, null=True)
 	status = models.IntegerField('status', choices=STATUS_CHOICES, default=NEW_STATUS)
 	on_hold = models.BooleanField('on hold', blank=True, help_text='A ticket that is on hold will not be auto escalated.')
-	description = models.TextField('Description', blank=True, null=True, help_text='A description of the problem.')
-	resolution = models.TextField('Resolution', blank=True, null=True, help_text='The resolution provided as an answer to the problem.')
+	description = models.TextField('description', blank=True, null=True, help_text='A description of the problem.')
+	resolution = models.TextField('resolution', blank=True, null=True, help_text='The resolution provided as an answer to the problem.')
 	priority = models.IntegerField('priority', default=3, choices=PRIORITY_CHOICES, help_text='The priority of this ticket, 1 is the highest, 5 the lowest priority.')
 	last_escalation = models.DateTimeField(blank=True, null=True, editable=False)
 	
