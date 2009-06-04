@@ -202,3 +202,25 @@ class FollowUp(models.Model):
 	@models.permalink
 	def get_absolute_url(self):
 		pass
+		
+class TicketChange(models.Model):
+	"""
+	For each follow up we track the changes made to the ticket here.
+	"""
+	
+	followup = models.ForeignKey(FollowUp)
+	field = models.CharField('field', max_length=100)
+	old_value = models.TextField('old value', blank=True, null=True)
+	new_value = models.TextField('new value', blank=True, null=True)
+	
+	def __unicode__(self):
+		str = '%s ' % self.field
+		
+		if not self.new_value:
+			str += 'removed'
+		elif not self.old_value:
+			str += 'set to %s ' % new_value
+		else:
+			str += 'changed from "%s" to "%s"' % (self.old_value, self.new_value)
+			
+		return str
