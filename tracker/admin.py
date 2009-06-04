@@ -1,5 +1,5 @@
 from django.contrib import admin
-from models import Queue, Ticket
+from models import Queue, Ticket, FollowUp, TicketChange
 
 class QueueAdmin(admin.ModelAdmin):
 	fieldsets = (
@@ -24,5 +24,20 @@ class TicketAdmin(admin.ModelAdmin):
 	date_hierarchy = 'created'
 	raw_id_fields = ['assigned_to']
 	
+class TicketChangeInline(admin.StackedInline):
+	model = TicketChange
+	
+class FollowUpAdmin(admin.ModelAdmin):
+	fieldsets = (
+		('Default information', {'fields': ('ticket', 'title', 'comment', 'public', 'user', 'new_status'), 'classes': ('wide', 'extrapretty')}),
+	)
+	list_display = ('title', 'user', 'public', 'new_status')
+	list_filter = ('new_status', 'public')
+	list_per_page = 25
+	search_fields = ('title', 'comment', 'user__first_name', 'user__last_name')
+	raw_id_fields = ['user']
+	inlines = [TicketChangeInline]
+	
 admin.site.register(Queue, QueueAdmin)
 admin.site.register(Ticket, TicketAdmin)
+admin.site.register(FollowUp, FollowUpAdmin)
