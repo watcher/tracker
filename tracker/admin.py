@@ -24,7 +24,8 @@ class TicketAdmin(admin.ModelAdmin):
 	date_hierarchy = 'created'
 	raw_id_fields = ['assigned_to']
 	
-class TicketChangeInline(admin.StackedInline):
+class TicketChangeInline(admin.TabularInline):
+	extra = 3
 	model = TicketChange
 	
 class FollowUpAdmin(admin.ModelAdmin):
