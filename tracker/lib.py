@@ -1,5 +1,13 @@
 from django.template.defaultfilters import slugify
+from django.shortcuts import render_to_response
+from django.template import RequestContext
 import re
+
+def response(request, *args, **kwargs):
+	"""Wraps the render_to_response call and make sure there is always a RequestContext passed allong."""
+	kwargs['context_instance'] = RequestContext(request)
+	
+	return render_to_response(*args, **kwargs)
 
 RE_SLUG_STRIP = re.compile(r'^-+|-+$')
 
