@@ -3,6 +3,7 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from datetime import datetime
 from lib import unique_slugify
+from managers import FollowUpManager
 
 class Queue(models.Model):
 	"""
@@ -161,6 +162,42 @@ class Ticket(models.Model):
 	class Meta:
 		get_latest_by = 'created'
 		ordering = ['-created']
+		
+	@models.permalink
+	def get_absolute_url(self):
+		pass
+		
+class FollowUp(models.Model):
+	"""
+	A follow up can be a comment and / or ticket change. This keeps a simple title, the comment is entered by the user and the new status of the ticket
+	is the enable easy flagging of details.
+	
+	The title is auto generated when the follow up is saved.
+	
+	A non-public ticket is only viewable to staff, a public ticket can be viewed by everybody.
+	"""
+	
+	ticket = models.ForeignKey(Ticket)
+	date = models.DateTimeField('date', auto_now_add=True)
+	title = models.CharField('title', max_length=200, blank=True, null=True)
+	comment = models.TextField('comment', blank=True, null=True)
+	public = models.BooleanField('public', blank=True, default=False, help_text='Public tickets are viewable by submitter and all members, non-public tickets are only visible to staff members.')
+	user = models.ForeignKey(User, blank=True, null=True)
+	new_status = models.IntegerField('new status', choices=Ticket.CHOICES, blank=True, null=True, help_text='If the status was changed, what was it changed too?')
+	objects = FollowUpManager()
+	
+	def __unicode__(self):
+		return self.title
+		
+	class Meta:
+		ordering = ['date']
+		
+	def save(self, *args, **kwargs):
+		t = self.ticket
+		t.modified = datetime.now()
+		t.save()
+		
+		super(FollowUp, self).save(*args, **kwargs)	
 		
 	@models.permalink
 	def get_absolute_url(self):
