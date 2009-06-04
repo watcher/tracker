@@ -1,0 +1,24 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+	"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html>
+	<head>
+		<title>Tracker</title>
+		
+		<link rel="stylesheet" href="{{ MEDIA_URL }}css/base.css" type="text/css" media="screen" title="no title" charset="utf-8" />
+		<script src="{{ MEDIA_URL }}js/jquery.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div id="container">
+			<div id="header">
+				<h1>Tracker</h1>
+				{% block navigation %}{% endblock %}
+			</div>
+			<div id="body">
+				{% block content %}{% endblock %}
+			</div>
+			<div id="footer">
+				<p>Tracker by Bernard 'watcher' Siebens (&copy; 2009 - {% now "Y" %})</p>
+			</div>
+		</div>
+	</body>
+</html>
