@@ -183,7 +183,7 @@ class FollowUp(models.Model):
 	comment = models.TextField('comment', blank=True, null=True)
 	public = models.BooleanField('public', blank=True, default=False, help_text='Public tickets are viewable by submitter and all members, non-public tickets are only visible to staff members.')
 	user = models.ForeignKey(User, blank=True, null=True)
-	new_status = models.IntegerField('new status', choices=Ticket.CHOICES, blank=True, null=True, help_text='If the status was changed, what was it changed too?')
+	new_status = models.IntegerField('new status', choices=Ticket.STATUS_CHOICES, blank=True, null=True, help_text='If the status was changed, what was it changed too?')
 	objects = FollowUpManager()
 	
 	def __unicode__(self):
