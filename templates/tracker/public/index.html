@@ -13,12 +13,15 @@
 	
 	<div class="post">
 		<h1 class="title">Add a new ticket</h1>
+		<p>All fields are required.</p>
 		<form method="post" action="#">
 			<fieldset>
 				{% for field in form %}
 					{% display_field field %}
 				{% endfor %}
 			</fieldset>
+			<br />
+			<input class="submit" type="submit" value="create a new issue" />
 		</form>
 	</div>
 {% endblock %}
