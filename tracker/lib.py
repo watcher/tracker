@@ -1,13 +1,24 @@
 from django.template.defaultfilters import slugify
 from django.shortcuts import render_to_response
 from django.template import RequestContext
+from django.contrib.sites.models import RequestSite, Site
+from django.conf import settings
 import re
 
-def response(request, *args, **kwargs):
+def response(request, template, dictionary, *args, **kwargs):
 	"""Wraps the render_to_response call and make sure there is always a RequestContext passed allong."""
 	kwargs['context_instance'] = RequestContext(request)
 	
-	return render_to_response(*args, **kwargs)
+	site = RequestSite(request)
+	
+	try:
+		site = Site.objects.get(pk=settings.SITE_ID)
+	except:
+		pass
+		
+	dictionary['site'] = site
+	
+	return render_to_response(template, dictionary, *args, **kwargs)
 
 RE_SLUG_STRIP = re.compile(r'^-+|-+$')
 
