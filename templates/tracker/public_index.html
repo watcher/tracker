@@ -1,1 +1,21 @@
 {% extends "tracker/base_public.html" %}
+
+{% load form_tags %}
+
+{% block content %}
+	<h1>Submit a new ticket</h1>
+	<p>All fields are required. Please provide as much information as possible, this will allow us to help you faster.</p>
+	
+	<form method="post" action="" enctype="multipart/form-data">
+		<fieldset>
+			<dl>
+				{% for field in form %}
+					{% display_field field %}
+				{% endfor %}
+			</dl>
+			
+			<div class='buttons'>
+		        <input type='submit' value='Submit a new ticket' />
+		    </div>
+		</fieldset>
+{% endblock %}
