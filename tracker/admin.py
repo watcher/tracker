@@ -1,5 +1,5 @@
 from django.contrib import admin
-from models import Queue, Ticket, FollowUp, TicketChange
+from models import Queue, Ticket, FollowUp, TicketChange, Attachment
 
 class QueueAdmin(admin.ModelAdmin):
 	fieldsets = (
@@ -28,6 +28,10 @@ class TicketChangeInline(admin.TabularInline):
 	extra = 3
 	model = TicketChange
 	
+class AttachmentInline(admin.TabularInline):
+	extra = 3
+	model = Attachment
+	
 class FollowUpAdmin(admin.ModelAdmin):
 	fieldsets = (
 		('Default information', {'fields': ('ticket', 'title', 'comment', 'public', 'user', 'new_status'), 'classes': ('wide', 'extrapretty')}),
@@ -37,7 +41,7 @@ class FollowUpAdmin(admin.ModelAdmin):
 	list_per_page = 25
 	search_fields = ('title', 'comment', 'user__first_name', 'user__last_name')
 	raw_id_fields = ['user']
-	inlines = [TicketChangeInline]
+	inlines = [TicketChangeInline, AttachmentInline]
 	
 admin.site.register(Queue, QueueAdmin)
 admin.site.register(Ticket, TicketAdmin)

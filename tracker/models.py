@@ -224,3 +224,41 @@ class TicketChange(models.Model):
 			str += 'changed from "%s" to "%s"' % (self.old_value, self.new_value)
 			
 		return str
+		
+def attachment_path(instance, filename):
+	"""
+	Provide a file path that will help prevent files being overwritten.
+	"""
+	import os
+	
+	os.umask(0)
+	path = 'tracker/attachments/%s/%s' % (instance.followup.ticket.ticket_for_url, instance.followup.id)
+	att_path = os.path.join(settings.MEDIA_ROOT, path)
+	
+	if not os.path.exists(att_path):
+		os.makedirs(att_path, 0777)
+		
+	return os.path.join(path, filename)
+	
+class Attachment(models.Model):
+	"""
+	A file attached to a follow up.
+	"""
+	
+	followup = models.ForeignKey(FollowUp)
+	file = models.FileField('file', upload_to=attachment_path)
+	filename = models.CharField('filename', max_length=100)
+	mime_type = models.CharField('MIME type', max_length=30)
+	size = models.IntegerField('size', help_text='Size of this file in bytes.')
+	
+	def get_upload_to(self, field_attname):
+		"""Get upload_to path specific to this item."""
+		if not self.id:
+			return ''
+		return 'tracker/attachments/%s/%s' % (self.followup.ticket.ticket_for_url, self.followup.id)
+		
+	def __unicode__(self):
+		return self.filename
+		
+	class Meta:
+		ordering = ['filename']
