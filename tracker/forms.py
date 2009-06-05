@@ -6,7 +6,7 @@ class PublicTicketForm(forms.Form):
 	title = forms.CharField(label='Summary of your issue', required=True, max_length=100, widget=forms.TextInput())
 	submitter_email = forms.EmailField(required=True, label='Your e-mail address', help_text='We will use this e-mail to keep you informed of all updates to this ticket.')
 	body = forms.CharField(label='Description of your issue', widget=forms.Textarea(), required=True, help_text='Please provide as much details as possible to help us solve your issue.')
-	priority = forms.ChoiceField(label='Priority', choices=Ticket.PRIORITY_CHOICES, initial=3, help_text='Please select a priority carefully.')
+	priority = forms.ChoiceField(label='Priority', choices=Ticket.PRIORITY_CHOICES, initial=3, help_text='Please select a priority carefully, this will be changed by a member of staff if too high or low.')
 	
 	def save(self):
 		q = Queue.objects.get(id=int(self.cleaned_data['queue']))
