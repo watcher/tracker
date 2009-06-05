@@ -1,6 +1,6 @@
-from models import Queue, Ticket
-from forms import PublicTicketForm
-from lib import response
+from tracker.models import Queue, Ticket
+from tracker.forms import PublicTicketForm
+from tracker.lib import response
 
 def index(request):
 	if request.user.is_staff:
@@ -14,4 +14,4 @@ def index(request):
 		form = PublicTicketForm()
 		form.fields['queue'].choices = [[q.id, q.title] for q in Queue.objects.filter(allow_public_submission=True)]
 		
-		return response(request, 'tracker/public_index.html', {'form': form})
+		return response(request, 'tracker/public/index.html', locals())
