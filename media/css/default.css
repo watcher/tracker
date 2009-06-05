@@ -79,6 +79,11 @@ legend {
 input, textarea, select {
 	font-size: 13px;
 	color: #333333;
+	width: 375px;
+}
+
+#search input {
+	width: auto;
 }
 
 #wrapper {
@@ -361,4 +366,35 @@ html>body #footer {
 
 #legal a {
 	font-weight: normal;
+}
+
+/* Form display */
+label {
+	font-weight: bold;
+}
+
+span.form_optional {
+	color: #666;
+	font-size: 95%;
+}
+
+dd.form_help_text {
+	color: #666;
+	font-size: 95%;
+}
+
+ul.errorlist {
+	color: #a33;
+	font-size: 95%;
+}
+
+dt {
+	padding-top: 8px;
+}
+
+input.submit {
+	display: block;
+	width: 200px;
+	margin: 0 auto;
+	margin-top: 15px;
 }
