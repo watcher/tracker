@@ -1,0 +1,24 @@
+{% extends "tracker/public/base.html" %}
+
+{% load form_tags %}
+
+{% block content %}
+	<div class="post">
+		<h1 class="title">Welcome</h1>
+		<div class="entry">
+			<p>Welcome to the issue tracker of {{ site.name }}. This issue tracker can be used for reporting bugs, asking questions and getting support.</p>
+			<p>When entering a new ticket please check to see if there isn't already a ticket describing your problem, and when your issue isn't reported yet, please provide as much information as possible in your ticket. This will help us solve your problem much faster!</p>
+		</div>	
+	</div>
+	
+	<div class="post">
+		<h1 class="title">Add a new ticket</h1>
+		<form method="post" action="#">
+			<fieldset>
+				{% for field in form %}
+					{% display_field field %}
+				{% endfor %}
+			</fieldset>
+		</form>
+	</div>
+{% endblock %}

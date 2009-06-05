@@ -1,8 +1,8 @@
 {% extends "tracker/base.html" %}
 
-{% block navigation %}
+{% block menu %}
 	<ul>
-		<li><a href="#">submit a ticket</a></li>
+		<li><a href="{% url tracker-public-index %}">add a new ticket</a></li>
 		<li><a href="#">browse all tickets</a></li>
 		<li><a href="#">login</a></li>
 	</ul>
