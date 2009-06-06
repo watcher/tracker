@@ -17,7 +17,8 @@ class TicketAdmin(admin.ModelAdmin):
 		('Default information', {'fields': ('title', 'queue', 'submitter_email', 'assigned_to', 'status', 'priority', 'on_hold'), 'classes': ('wide', 'extrapretty')}),
 		('Ticket information', {'fields': ('description', 'resolution'), 'classes': ('wide', 'extrapretty')}),
 	)
-	list_display = ('title', 'status', 'priority', '_get_assigned_to', 'queue', 'on_hold', 'submitter_email')
+	list_display = ('id', 'title', 'status', 'priority', '_get_assigned_to', 'queue', 'on_hold', 'submitter_email')
+	list_display_links = ('title',)
 	list_filter = ('status', 'priority', 'on_hold', 'queue')
 	list_per_page = 25
 	search_fields = ['title', 'submitter_email', 'description', 'resolution', 'assigned_to__first_name', 'assigned_to__last_name']
@@ -40,7 +41,7 @@ class FollowUpAdmin(admin.ModelAdmin):
 	list_filter = ('new_status', 'public')
 	list_per_page = 25
 	search_fields = ('title', 'comment', 'user__first_name', 'user__last_name')
-	raw_id_fields = ['user']
+	raw_id_fields = ['user', 'ticket']
 	inlines = [TicketChangeInline, AttachmentInline]
 	
 admin.site.register(Queue, QueueAdmin)
