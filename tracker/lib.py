@@ -9,16 +9,19 @@ def response(request, template, dictionary, *args, **kwargs):
 	"""Wraps the render_to_response call and make sure there is always a RequestContext passed allong."""
 	kwargs['context_instance'] = RequestContext(request)
 	
-	site = RequestSite(request)
-	
-	try:
-		site = Site.objects.get(pk=settings.SITE_ID)
-	except:
-		pass
-		
-	dictionary['site'] = site
+	dictionary['site'] = _get_site_name(request)
 	
 	return render_to_response(template, dictionary, *args, **kwargs)
+	
+def _get_site_name(request):
+	"""Returns either the current site object, or else the name defined in settings.py. As a last resort it gets the name from the request object."""
+	try:
+		return Site.objects.get(pk=settings.SITE_ID).name
+	except:
+		try:
+			return settings.SITE_NAME
+		except:
+			return RequestSite(request).name
 
 RE_SLUG_STRIP = re.compile(r'^-+|-+$')
 
