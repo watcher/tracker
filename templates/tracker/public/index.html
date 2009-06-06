@@ -14,7 +14,7 @@
 	<div class="post">
 		<h1 class="title">Add a new ticket</h1>
 		<p>All fields are required.</p>
-		<form method="post" action="#">
+		<form method="post" action="{% url tracker-public-index %}" enctype="multipart/form-data">
 			<fieldset>
 				{% for field in form %}
 					{% display_field field %}
