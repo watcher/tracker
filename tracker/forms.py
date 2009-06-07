@@ -1,4 +1,12 @@
 from django import forms
+from django.conf import settings
+from tracker.models import Ticket, Queue, FollowUp, Attachment
+
+class PublicTicketForm(forms.Form):
+	pass
+
+
+from django import forms
 from models import Ticket, Queue, FollowUp, Attachment
 from django.conf import settings
 
