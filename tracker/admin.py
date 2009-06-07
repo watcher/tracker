@@ -1,5 +1,5 @@
 from django.contrib import admin
-from tracker.models import Queue, Ticket
+from tracker.models import Queue, Ticket, FollowUp, TicketChange, Attachment
 
 class QueueAdmin(admin.ModelAdmin):
 	fieldsets = (
@@ -33,6 +33,27 @@ class TicketAdmin(admin.ModelAdmin):
 	search_fields = ['title', 'submitter_email', 'assigned_to__first_name', 'assigned_to__last_name', 'description']
 	date_hierarchy = 'created'
 	raw_id_fields = ['assigned_to']
+	
+class TicketChangeInline(admin.TabularInline):
+	model = TicketChange
+	extra = 3
+	
+class AttachmentInline(admin.TabularInline):
+	model = Attachment
+	extra = 3
+	
+class FollowUpAdmin(admin.ModelAdmin):
+	fieldsets = (
+		('General information', {'fields': ('ticket', 'title', 'comment', 'user', 'public'), 'classes': ('wide', 'extrapretty')}),
+	)
+	list_display = ('title', 'ticket', 'date', 'user', 'public')
+	list_per_page = 25
+	list_filter = ('public',)
+	search_fields = ['title', 'comment', 'ticket', 'user__first_name', 'user__last_name']
+	date_hierarchy = 'date'
+	raw_id_fields = ['user', 'ticket']
+	inlines = [TicketChangeInline, AttachmentInline]
 
 admin.site.register(Queue, QueueAdmin)
 admin.site.register(Ticket, TicketAdmin)
+admin.site.register(FollowUp, FollowUpAdmin)
