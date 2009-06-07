@@ -116,3 +116,52 @@ class FollowUp(models.Model):
 		self.ticket.save()
 		
 		super(FollowUp, self).save(*args, **kwargs)
+		
+class TicketChange(models.Model):
+	followup = models.ForeignKey(FollowUp)
+	field = models.CharField('Field', max_length=200)
+	old_value = models.CharField('Old value', max_length=200, blank=True, null=True)
+	new_value = models.CharField('New value', max_length=200, blank=True, null=True)
+	
+	def __unicode__(self):
+		string = "%s " % self.field
+		
+		if not self.new_value:
+			str += 'removed'
+		elif not self.old_value:
+			str += "set to %s" % self.new_value
+		else:
+			str += "changed from %s to %s" % (self.old_value, self.new_value)
+			
+		return str
+		
+def attachment_path(instance, filename):
+	from django.conf import settings
+	import os
+	
+	os.umask(0)
+	path = "tracker/attachmets/%s-%s/%s" % (instance.followup.ticket.queue.slug, instance.followup.ticket.id, instance.followup.id)
+	att_path = os.path.join(settings.MEDIA_ROOT, path)
+	
+	if not os.path.exists(att_path):
+		os.makedirs(att_path, 0777)
+		
+	return os.path.join(path, filename)
+		
+class Attachment(models.Model):
+	followup = models.ForeignKey(FollowUp)
+	file = models.FileField('File', upload_to=attachment_path)
+	filename = models.CharField('Filename', max_length=250)
+	mime_type = models.CharField('MIME type', max_length=30)
+	size = models.IntegerField('Size')
+	
+	def get_upload_to(self, field_attname):
+		if not self.id:
+			return ''
+		return "tracker/attachments/%s-%s/%s" % (self.followup.ticket.queue.slug, self.followup.ticket.id, instance.followup.id)
+		
+	def __unicode__(self):
+		return self.filename
+		
+	class Meta:
+		ordering = ['filename']
