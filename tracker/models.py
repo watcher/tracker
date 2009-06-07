@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from tracker.lib import unique_slugify
+from tracker.managers import FollowUpManager
 
 class Queue(models.Model):
 	title = models.CharField('Title', max_length=250)
@@ -95,3 +96,23 @@ class Ticket(models.Model):
 	@models.permalink
 	def get_absolute_url(self):
 		pass
+		
+class FollowUp(models.Model):
+	ticket = models.ForeignKey(Ticket)
+	date = models.DateTimeField('Date', auto_now_add=True)
+	title = models.CharField('Title', max_length=200, blank=True, null=True)
+	comment = models.TextField('Comment', blank=True, null=True)
+	public = models.BooleanField('Public?', default=True)
+	user = models.ForeignKey(User, blank=True, null=True)
+	objects = FollowUpManager()
+	
+	def __unicode__(self):
+		return self.title
+		
+	class Meta:
+		ordering = ['date']
+		
+	def save(self, *args, **kwargs):
+		self.ticket.save()
+		
+		super(FollowUp, self).save(*args, **kwargs)
