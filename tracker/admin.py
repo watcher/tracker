@@ -14,12 +14,12 @@ class QueueAdmin(admin.ModelAdmin):
 	
 class TicketAdmin(admin.ModelAdmin):
 	fieldsets = (
-		('Default information', {'fields': ('title', 'queue', 'submitter_email', 'assigned_to', 'status', 'priority', 'on_hold'), 'classes': ('wide', 'extrapretty')}),
+		('Default information', {'fields': ('title', 'queue', 'submitter_email', 'assigned_to', 'status', 'priority', 'on_hold', 'public'), 'classes': ('wide', 'extrapretty')}),
 		('Ticket information', {'fields': ('description', 'resolution'), 'classes': ('wide', 'extrapretty')}),
 	)
-	list_display = ('id', 'title', 'status', 'priority', '_get_assigned_to', 'queue', 'on_hold', 'submitter_email')
+	list_display = ('id', 'title', 'status', 'priority', '_get_assigned_to', 'queue', 'on_hold', 'public', 'submitter_email')
 	list_display_links = ('title',)
-	list_filter = ('status', 'priority', 'on_hold', 'queue')
+	list_filter = ('status', 'priority', 'on_hold', 'public', 'queue')
 	list_per_page = 25
 	search_fields = ['title', 'submitter_email', 'description', 'resolution', 'assigned_to__first_name', 'assigned_to__last_name']
 	date_hierarchy = 'created'

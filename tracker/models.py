@@ -108,6 +108,7 @@ class Ticket(models.Model):
 	resolution = models.TextField('resolution', blank=True, null=True, help_text='The resolution provided as an answer to the problem.')
 	priority = models.IntegerField('priority', default=3, choices=PRIORITY_CHOICES, help_text='The priority of this ticket, 1 is the highest, 5 the lowest priority.')
 	last_escalation = models.DateTimeField(blank=True, null=True, editable=False)
+	public = models.BooleanField('public?', default=True, blank=True, help_text='A public ticket in a public queue is viewable by everybody.')
 	
 	def _get_assigned_to(self):
 		"""Checks the person to which this ticket is assigned to. If it's not assigned to anybody, we return Unassigned."""
@@ -156,6 +157,14 @@ class Ticket(models.Model):
 		pass
 	get_staff_url = property(_get_staff_url)
 	
+	def _is_public(self):
+		"""Returns wheter a ticket can be viewed by everybody, or requires an e-mail to view."""
+		if self.public and self.status != self.NEW_STATUS:
+			return True
+		
+		return False
+	is_public = property(_is_public)
+	
 	def __unicode__(self):
 		return self.title
 	
@@ -181,7 +190,7 @@ class FollowUp(models.Model):
 	date = models.DateTimeField('date', auto_now_add=True)
 	title = models.CharField('title', max_length=200, blank=True, null=True)
 	comment = models.TextField('comment', blank=True, null=True)
-	public = models.BooleanField('public', blank=True, default=False, help_text='Public tickets are viewable by submitter and all members, non-public tickets are only visible to staff members.')
+	public = models.BooleanField('public', blank=True, default=False, help_text='Non-public updates on public tickets are only viewable by staff members.')
 	user = models.ForeignKey(User, blank=True, null=True)
 	new_status = models.IntegerField('new status', choices=Ticket.STATUS_CHOICES, blank=True, null=True, help_text='If the status was changed, what was it changed too?')
 	objects = FollowUpManager()
