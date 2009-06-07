@@ -1,49 +1,59 @@
 from django.contrib import admin
-from models import Queue, Ticket, FollowUp, TicketChange, Attachment
+from tracker.models import Queue, Ticket, FollowUp, TicketChange, Attachment
 
 class QueueAdmin(admin.ModelAdmin):
 	fieldsets = (
-		('Default options', {'fields': ('title', 'slug', 'email_address', 'allow_public_submission', 'allow_email_submission', 'active'), 'classes': ('wide', 'extrapretty')}),
-		('Advanced options', {'fields': ('escalate_days', 'new_ticket_cc'), 'classes': ('wide', 'extrapretty')}),
-		('E-mail options', {'fields': ('email_box_type', 'email_box_host', 'email_box_port', 'email_box_ssl', 'email_box_user', 'email_box_password', 'email_box_imap_folder', 'email_box_interval'), 'classes': ('wide', 'extrapretty', 'collapse')}),
+		('General information', {'fields': ('title', 'slug', 'email_address', 'new_ticket_cc', 'allow_public_submission', 'active', 'escalate_days'), 'classes': ('wide', 'extrapretty')}),
 	)
-	list_display = ('title', 'slug', 'email_address', 'active', 'new_ticket_cc')
-	list_filter = ('active', 'email_box_type')
+	list_display = ('title', 'slug', 'email_address', 'new_ticket_cc', 'active')
+	list_display_links = ('title',)
+	list_filter = ('active',)
 	list_per_page = 25
-	search_fields = ['title', 'email_address', 'new_ticket_cc', 'email_box_user', 'email_box_host']
+	search_fields = ['title', 'email_address', 'new_ticket_cc']
+	actions = ['deactivate_queues', 'activate_queues']
+	
+	def deactivate_queues(self, request, queryset):
+		queryset.update(active=False)
+	deactivate_queues.short_description = 'Mark selected queues as inactive'
+	
+	def activate_queues(self, request, queryset):
+		queryset.update(active=True)
+	activate_queues.short_description = 'Mark selected queues as active'
 	
 class TicketAdmin(admin.ModelAdmin):
 	fieldsets = (
-		('Default information', {'fields': ('title', 'queue', 'submitter_email', 'assigned_to', 'status', 'priority', 'on_hold', 'public'), 'classes': ('wide', 'extrapretty')}),
-		('Ticket information', {'fields': ('description', 'resolution'), 'classes': ('wide', 'extrapretty')}),
+		('General information', {'fields': ('queue', 'title', 'description', 'public', 'submitter_email'), 'classes': ('wide', 'extrapretty')}),
+		('Advanced informtion', {'fields': ('status', 'priority', 'on_hold', 'assigned_to'), 'classes': ('wide', 'extrapretty')}),
+		('Resolution', {'fields': ('resolution',), 'classes': ('wide', 'extrapretty')}),
 	)
-	list_display = ('id', 'title', 'status', 'priority', '_get_assigned_to', 'queue', 'on_hold', 'public', 'submitter_email')
+	list_display = ('title', 'id', 'queue', 'public', 'submitter_email', 'status', 'priority', 'on_hold', '_get_assigned_to')
 	list_display_links = ('title',)
-	list_filter = ('status', 'priority', 'on_hold', 'public', 'queue')
 	list_per_page = 25
-	search_fields = ['title', 'submitter_email', 'description', 'resolution', 'assigned_to__first_name', 'assigned_to__last_name']
+	list_filter = ('modified', 'status', 'priority', 'on_hold', 'queue')
+	search_fields = ['title', 'submitter_email', 'assigned_to__first_name', 'assigned_to__last_name', 'description']
 	date_hierarchy = 'created'
 	raw_id_fields = ['assigned_to']
 	
 class TicketChangeInline(admin.TabularInline):
-	extra = 3
 	model = TicketChange
+	extra = 3
 	
 class AttachmentInline(admin.TabularInline):
-	extra = 3
 	model = Attachment
+	extra = 3
 	
 class FollowUpAdmin(admin.ModelAdmin):
 	fieldsets = (
-		('Default information', {'fields': ('ticket', 'title', 'comment', 'public', 'user', 'new_status'), 'classes': ('wide', 'extrapretty')}),
+		('General information', {'fields': ('ticket', 'title', 'comment', 'user', 'public'), 'classes': ('wide', 'extrapretty')}),
 	)
-	list_display = ('title', 'user', 'public', 'new_status')
-	list_filter = ('new_status', 'public')
+	list_display = ('title', 'ticket', 'date', 'user', 'public')
 	list_per_page = 25
-	search_fields = ('title', 'comment', 'user__first_name', 'user__last_name')
+	list_filter = ('public',)
+	search_fields = ['title', 'comment', 'ticket', 'user__first_name', 'user__last_name']
+	date_hierarchy = 'date'
 	raw_id_fields = ['user', 'ticket']
 	inlines = [TicketChangeInline, AttachmentInline]
-	
+
 admin.site.register(Queue, QueueAdmin)
 admin.site.register(Ticket, TicketAdmin)
 admin.site.register(FollowUp, FollowUpAdmin)
