@@ -24,17 +24,20 @@ def index(request):
 	return response(request, 'tracker/public/index.html', locals())
 	
 def view_ticket(request, queue, id):
-	email = request.GET.get('email', '')
 	error_message = ''
 	
-	if email:
-		try:
-			ticket = Ticket.objects.get(pk=id, queue__slug__iexact=queue, submitter_email__iexact=email)
-		except Ticket.DoesNotExist:
-			ticket = False
-			error_message = 'Invalid ticket ID or e-mail address. Please try again.'
+	try:
+		ticket = Ticket.objects.get(pk=id, queue__slug__iexact=queue)
+	except Ticket.DoesNotExist:
+		ticket = False
+		error_message = 'Invalid ticket ID or e-mail address. Please try again.'
+		
+	if ticket:
+		if not ticket.is_public and request.GET.get('email', '') != ticket.submitter_email:
+			error_message = 'Invalid e-mail address. You need to specify the e-mail address of the person who entered the ticket to be able to view this ticket.'
 			
-		if ticket:
-			return response(request, 'tracker/public/view_ticket.html', locals())
-	
+			return response(request, 'tracker/public/404.html', locals())
+				
+		return response(request, 'tracker/public/view_ticket.html', locals())
+		
 	return response(request, 'tracker/public/404.html', locals())

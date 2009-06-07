@@ -162,6 +162,20 @@ body {
 	margin-left: 20px;
 }
 
+#content table.ticketdetails {
+	padding-bottom: 10px;
+	border-bottom: 1px solid black;
+}
+
+#content table tr.odd {
+	background-color: #ccc;
+}
+
+#content .followup h3 {
+	font-variant: small-caps;
+	border-bottom: 1px dashed black;
+}
+
 #footer {
 	clear: both;
 	margin-top: 20px;
