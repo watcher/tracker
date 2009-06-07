@@ -9,7 +9,7 @@ class Queue(models.Model):
 	email_address = models.EmailField('E-Mail address')
 	allow_public_submission = models.BooleanField('Allow the submission of tickets from non-logged in users?', default=True)
 	active = models.BooleanField('Active queue?', default=True)
-	escalate_days = models.IntegerField('Escalation days', default=0, blank=True)
+	escalate_days = models.IntegerField('Escalation days', default=0, blank=True, null=True)
 	new_ticket_cc = models.EmailField('New ticket CC e-mail address', blank=True, null=True)
 	
 	def __unicode__(self):
@@ -51,11 +51,11 @@ class Ticket(models.Model):
 	
 	queue = models.ForeignKey(Queue)
 	title = models.CharField('Title', max_length=250)
-	description = models.TextField('Description', blank=True)
-	resolution = models.TextField('Resolution', blank=True)
+	description = models.TextField('Description', blank=True, null=True)
+	resolution = models.TextField('Resolution', blank=True, null=True)
 	public = models.BooleanField('Public ticket?', default=True)
-	submitter_email = models.EmailField('Submitter e-mail', blank=True)
-	assigned_to = models.ForeignKey(User, verbose_name='Assigned to', blank=True)
+	submitter_email = models.EmailField('Submitter e-mail', blank=True, null=True)
+	assigned_to = models.ForeignKey(User, verbose_name='Assigned to', blank=True, null=True)
 	status = models.IntegerField('Status', choices=STATUS_CHOICES, default=NEW_STATUS)
 	on_hold = models.BooleanField('On hold?', default=False)
 	priority = models.IntegerField('Priority', choices=PRIORITY_CHOICES, default=3)
