@@ -4,6 +4,10 @@ body {
 	text-align: center;
 }
 
+table {
+	border-collapse: collapse;
+}
+
 #wrapper {
 	width: 1000px;
 	margin: 0 auto;
@@ -165,6 +169,10 @@ body {
 #content table.ticketdetails {
 	padding-bottom: 10px;
 	border-bottom: 1px solid black;
+}
+
+#content table.ticketdetails th {
+	vertical-align: top;
 }
 
 #content table tr.odd {
