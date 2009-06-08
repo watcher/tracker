@@ -1,11 +1,13 @@
 {% extends "tracker/public/base.html" %}
 
+{% load form_tags %}
+
 {% block content %}
 	<h1>Ticket n&deg;{{ ticket.id }}. {{ ticket.title }} [{{ ticket.get_status|lower }}]</h1>
 	
 	<table width="100%" class="ticketdetails">
 		<tr>
-			<th width="15%">Queue</th>
+			<th width="13%">Queue</th>
 			<td>{{ ticket.queue.title }}</td>
 			<th width="10%">Public status</th>
 			<td width="15%">
@@ -44,7 +46,16 @@
 		</tr>
 		<tr>
 			<th>Description</th>
-			<td colspan="3">{{ ticket.description }}</td>
+			<td colspan="3">
+				{{ ticket.description }}<br /><br />
+				
+				<b>Attachments:</b>
+				<ul>
+					{% for attachment in ticket.followup_set.public_followups.0.attachment_set.all %}
+						<li><a href="{{ attachment.file.url }}">{{ attachment.filename }}</a> ({{ attachment.mime_type }}, {{ attachment.size|filesizeformat }})</li>
+					{% endfor %}
+				</ul>
+			</td>
 		</tr>
 		{% if ticket.resolution %}
 			<tr class="odd">
@@ -76,5 +87,19 @@
 				{% endif %}
 			</div>
 		{% endfor %}
+	{% endif %}
+	
+	<h2>Comment</h2>
+	{% if ticket.is_public %}
+		<p>All fields are required.</p>
+		<form method="post" action="{{ request.get_full_path }}" enctype="multipart/form-data">
+			{% for field in form %}
+				{% display_field field %}
+			{% endfor %}
+			<br />
+			<input class="submit" type="submit" value="add a new comment" />
+		</form>
+	{% else %}
+		<p>You cannot make a comment to this ticket, commenting is only allowed to members of staff and the original submitter of this ticket. If you are the original submitter of this ticket you can make a comment by replying to the e-mail message you received when creating the ticket and keeping the subject intact.</p>
 	{% endif %}
 {% endblock %}

@@ -31,3 +31,26 @@ class PublicTicketForm(forms.Form):
 			# 	files.append(a.file.path)
 			
 		return t
+		
+class FollowUpForm(forms.Form):
+	ticket = forms.IntegerField(widget=forms.HiddenInput())
+	email = forms.EmailField(label='Your e-mail address', required=True)
+	comment = forms.CharField(label='Comment', required=True, widget=forms.Textarea())
+	attachment = forms.FileField(label='Attach a file', required=False, help_text='You can attach a file (for instance a screenshot) to clarify your comment.')
+	
+	def save(self):
+		t = Ticket.objects.get(pk=self.cleaned_data['ticket'])
+		
+		f = FollowUp(ticket=t, title='Comment from %s' % self.cleaned_data['email'], comment=self.cleaned_data['comment'], public=True)
+		f.save()
+		
+		if self.cleaned_data['attachment']:
+			import mimetypes
+			
+			file = self.cleaned_data['attachment']
+			filename = file.name.replace(' ', '_')
+			
+			a = Attachment(followup=f, filename=filename, mime_type=mimetypes.guess_type(filename)[0] or 'application/octet-stream', size=file.size)
+			a.file.save(file.name, file)
+			
+		return t

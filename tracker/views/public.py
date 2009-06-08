@@ -1,7 +1,7 @@
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from tracker.lib import response
-from tracker.forms import PublicTicketForm
+from tracker.forms import PublicTicketForm, FollowUpForm
 from tracker.models import Ticket
 
 def index(request):
@@ -34,8 +34,18 @@ def view_ticket(request, queue, id):
 			if not ticket.public:
 				error = 'This ticket has been made non-public by a member of staff. This could be because this ticket either contains confidential information or because the person who submitted the ticket requested it. If you are the person who submitted this ticket, please check your mailbox to find your personal link to access this ticket.'
 				return response(request, 'tracker/public/error.html', {'error': error})
+			
+		if request.method == 'POST' and ticket.is_public:
+			form = FollowUpForm(request.POST, request.FILES)
+			
+			if form.is_valid():
+				t = form.save()
+				
+				return HttpResponseRedirect('%s' % (reverse('tracker-public-view-ticket', args=[t.queue.slug, t.id])))
+		else:
+			form = FollowUpForm(initial={'ticket': ticket.id})
 		
-		return response(request, 'tracker/public/view_ticket.html', {'ticket': ticket})
+		return response(request, 'tracker/public/view_ticket.html', {'ticket': ticket, 'request': request, 'form': form})
 	
 	else:
 		error = 'The requested ticket can not be found in our database. Please check your URL and try again.'
