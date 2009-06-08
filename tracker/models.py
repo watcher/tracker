@@ -60,6 +60,7 @@ class Ticket(models.Model):
 	on_hold = models.BooleanField('On hold?', default=False)
 	priority = models.IntegerField('Priority', choices=PRIORITY_CHOICES, default=3)
 	last_escalation = models.DateTimeField('Last escalation date', blank=True, editable=False, null=True)
+	allow_comments = models.BooleanField('Allow comments?', default=True)
 	created = models.DateTimeField('Created', auto_now_add=True)
 	modified = models.DateTimeField('Modified', auto_now=True)
 	
@@ -85,6 +86,10 @@ class Ticket(models.Model):
 		
 		return "%s%s" % (self.get_status_display().lower(), held_msg)
 	get_status = property(_get_status)
+	
+	def _is_public(self):
+		return self.public and not self.status == self.NEW_STATUS and self.allow_comments
+	is_public = property(_is_public)
 	
 	def __unicode__(self):
 		return self.title
@@ -140,7 +145,7 @@ def attachment_path(instance, filename):
 	import os
 	
 	os.umask(0)
-	path = "tracker/attachmets/%s-%s/%s" % (instance.followup.ticket.queue.slug, instance.followup.ticket.id, instance.followup.id)
+	path = "tracker/attachments/%s-%s/%s" % (instance.followup.ticket.queue.slug, instance.followup.ticket.id, instance.followup.id)
 	att_path = os.path.join(settings.MEDIA_ROOT, path)
 	
 	if not os.path.exists(att_path):

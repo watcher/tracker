@@ -23,7 +23,7 @@ class QueueAdmin(admin.ModelAdmin):
 class TicketAdmin(admin.ModelAdmin):
 	fieldsets = (
 		('General information', {'fields': ('queue', 'title', 'description', 'public', 'submitter_email'), 'classes': ('wide', 'extrapretty')}),
-		('Advanced informtion', {'fields': ('status', 'priority', 'on_hold', 'assigned_to'), 'classes': ('wide', 'extrapretty')}),
+		('Advanced informtion', {'fields': ('status', 'priority', 'on_hold', 'assigned_to', 'allow_comments'), 'classes': ('wide', 'extrapretty')}),
 		('Resolution', {'fields': ('resolution',), 'classes': ('wide', 'extrapretty')}),
 	)
 	list_display = ('title', 'id', 'queue', 'public', 'submitter_email', 'status', 'priority', 'on_hold', '_get_assigned_to')
