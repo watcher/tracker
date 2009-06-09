@@ -92,7 +92,7 @@
 	<h2>Comment</h2>
 	{% if ticket.is_public %}
 		<p>All fields are required.</p>
-		<form method="post" action="{{ request.get_full_path }}" enctype="multipart/form-data">
+		<form method="post" action="{% url tracker-public-view-ticket ticket.queue.slug,ticket.id %}" enctype="multipart/form-data">
 			{% for field in form %}
 				{% display_field field %}
 			{% endfor %}

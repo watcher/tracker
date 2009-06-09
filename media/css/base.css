@@ -29,6 +29,16 @@ table {
 	border-right: 3px solid black;
 }
 
+#header #tracker a{
+	color: black;
+	text-decoration: none;
+	border-bottom: 1px solid black;
+}
+
+#header #tracker a:hover {
+	border-bottom: 1px dashed black;
+}
+
 #header #sitename {
 	width: 300px;
 	float: left;
