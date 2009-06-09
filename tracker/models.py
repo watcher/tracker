@@ -100,7 +100,7 @@ class Ticket(models.Model):
 		
 	@models.permalink
 	def get_absolute_url(self):
-		pass
+		return ('tracker-public-view-ticket', (), {'queue': self.queue.slug, 'id': str(self.id)})
 		
 class FollowUp(models.Model):
 	ticket = models.ForeignKey(Ticket)
