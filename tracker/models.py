@@ -53,7 +53,7 @@ class Ticket(models.Model):
 	title = models.CharField('Title', max_length=250)
 	description = models.TextField('Description', blank=True, null=True)
 	resolution = models.TextField('Resolution', blank=True, null=True)
-	public = models.BooleanField('Public ticket?', default=True)
+	public = models.BooleanField('Public ticket?', default=False)
 	submitter_email = models.EmailField('Submitter e-mail', blank=True, null=True)
 	assigned_to = models.ForeignKey(User, verbose_name='Assigned to', blank=True, null=True)
 	status = models.IntegerField('Status', choices=STATUS_CHOICES, default=NEW_STATUS)
