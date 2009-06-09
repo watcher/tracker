@@ -2,7 +2,7 @@ from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from tracker.lib import response
 from tracker.forms import PublicTicketForm, FollowUpForm
-from tracker.models import Ticket
+from tracker.models import Ticket, Queue
 
 def index(request):
 	if request.method == "POST":
@@ -69,3 +69,11 @@ def find_ticket(request):
 		return HttpResponseRedirect('%s?email=%s' % (reverse('tracker-public-view-ticket', args=[ticket.queue.slug, ticket.id]), ticket.submitter_email))
 	else:
 		return response(request, 'tracker/public/find_ticket.html', {})
+		
+def browse_tickets(request):
+	tickets = []
+	
+	for q in Queue.objects.all():
+		tickets.append({'queue': q, 'tickets': q.ticket_set.filter(public=True).filter(status__gt=Ticket.NEW_STATUS).filter(status__lt=Ticket.CLOSED_STATUS)})
+		
+	return response(request, 'tracker/public/browse_tickets.html', {'tickets': tickets})

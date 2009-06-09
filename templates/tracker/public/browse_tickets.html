@@ -1,0 +1,36 @@
+{% extends "tracker/public/base.html" %}
+
+{% block content %}
+	<h1>Browse all tickets</h1>
+	<p>Only public tickets will show up here.</p>
+	
+	{% for queue in tickets %}
+		<h2>{{ queue.queue.title }}</h2>
+		<table width='100%'>
+			<thead>
+				<tr style="border-bottom: 1px solid black;">
+					<th>#</th>
+					<th>Priority</th>
+					<th>Title</th>
+					<th>Status</th>
+					<th>Last update</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for ticket in queue.tickets %}
+					<tr {% cycle '' "class='odd'" %}>
+						<td><a href="{{ ticket.get_absolute_url }}">{{ ticket.get_ticket_slug }}</a></td>
+						<td><span class="priority{{ ticket.priority }}">{{ ticket.priority }}</span></td>
+						<td>{{ ticket.title }}</td>
+						<td>{{ ticket.get_status }}</td>
+						<td>{{ ticket.modified|timesince }} ago</td>
+					</tr>
+				{% empty %}
+					<tr>
+						<td colspan="5">No tickets found for this queue.</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	{% endfor %}
+{% endblock %}
