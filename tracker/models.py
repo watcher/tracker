@@ -76,6 +76,7 @@ class Ticket(models.Model):
 				return self.assigned_to.get_full_name()
 			else:
 				return self.assigned_to
+	get_assigned_to.short_description = 'Assigned to'
 	
 	def get_status(self):
 		held_msg = ''
