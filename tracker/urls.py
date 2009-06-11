@@ -6,3 +6,7 @@ urlpatterns = patterns('tracker.views.public',
 	url(r'^ticket/browse/$', 'browse_tickets', name='tracker-public-browse-tickets'),
 	url(r'^ticket/(?P<queue>\w+)/(?P<id>\d+)/$', 'view_ticket', name='tracker-public-view-ticket'),
 )
+
+urlpatterns += patterns('',
+	url(r'^login/$', 'django.contrib.auth.views.login', name='login'),
+)
