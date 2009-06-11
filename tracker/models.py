@@ -169,7 +169,7 @@ class Attachment(models.Model):
 		
 class EmailTemplate(models.Model):
 	name = models.CharField('Template name', max_length=100, unique=True)
-	subject = models.CharField('Subject', max_length=100, help_text='This will be prefixed by "[ticket.queue - ticket.id] ticket.title". We recommend using something simple such as "opened" or "closed".')
+	subject = models.CharField('Subject', max_length=100, blank=True, help_text='This will be prefixed by "[ticket.queue - ticket.id] ticket.title". We recommend using something simple such as "opened" or "closed".')
 	message = models.TextField('Message', help_text='The available context includes {{ ticket }}, {{ queue }}.')
 	
 	def __unicode__(self):
