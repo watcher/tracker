@@ -1,5 +1,36 @@
 from django.template.defaultfilters import slugify
+from django.conf import settings
+from django.core.mail import EmailMessage
+from django.template import loader, Context
+import os
 import re
+
+def send_templated_email(template_name, email_context, recipients, sender=None, bcc=None, fail_silently=False, files=None):
+	from tracker.models import EmailTemplate
+	
+	context = Context(email_context)
+	
+	template = EmailTemplate.objects.get(name__iexact=template_name)
+	
+	if not sender:
+		sender = settings.DEFAULT_FROM_EMAIL
+		
+	text = loader.get_template_from_string(template.message).render(context)
+	subject = loader.get_template_from_string("{{ ticket.get_ticket_slug }} {{ ticket.title }} %s" % template.subject).render(context)
+	
+	if type(recipients) != list:
+		recipients = [recipients,]
+		
+	email = EmailMessage(subject, text, sender, recipients, bcc=bcc)
+	
+	if files:
+		if type(files) != list:
+			files = [files,]
+			
+		for file in files:
+			email.attach_file(file)
+			
+	return email.send(fail_silently)
 
 RE_SLUG_STRIP = re.compile(r'^-+|-+$')
 
