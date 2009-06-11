@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.conf import settings
 from tracker.lib import unique_slugify
 from tracker.managers import FollowUpManager
+from tracker.signals import new_ticket_cc
 import hashlib
 import os
 
@@ -165,3 +166,16 @@ class Attachment(models.Model):
 		
 	class Meta:
 		ordering = ['filename']
+		
+class EmailTemplate(models.Model):
+	name = models.CharField('Template name', max_length=100, unique=True)
+	subject = models.CharField('Subject', max_length=100, help_text='This will be prefixed by "[ticket.queue - ticket.id] ticket.title". We recommend using something simple such as "opened" or "closed".')
+	message = models.TextField('Message', help_text='The available context includes {{ ticket }}, {{ queue }}.')
+	
+	def __unicode__(self):
+		return self.name
+		
+	class Meta:
+		ordering = ['name']
+		
+models.signals.post_save.connect(new_ticket_cc, sender=Ticket)

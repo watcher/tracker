@@ -1,5 +1,5 @@
 from django.contrib import admin
-from tracker.models import Queue, Ticket, FollowUp, TicketChange, Attachment
+from tracker.models import Queue, Ticket, FollowUp, TicketChange, Attachment, EmailTemplate
 
 class QueueAdmin(admin.ModelAdmin):
 	fieldsets = (
@@ -44,7 +44,16 @@ class FollowUpAdmin(admin.ModelAdmin):
 	date_hierarchy = 'date'
 	raw_id_fields = ['user', 'ticket']
 	inlines = [TicketChangeInline, AttachmentInline]
+	
+class EmailTemplateAdmin(admin.ModelAdmin):
+	fieldsets = (
+		('Template', {'fields': ('name', 'subject', 'message'), 'classes': ('wide', 'extrapretty')}),
+	)
+	list_display = ('name', 'subject')
+	list_per_page = 25
+	search_fields = ['name', 'subject']
 
 admin.site.register(Queue, QueueAdmin)
 admin.site.register(Ticket, TicketAdmin)
 admin.site.register(FollowUp, FollowUpAdmin)
+admin.site.register(EmailTemplate, EmailTemplateAdmin)
