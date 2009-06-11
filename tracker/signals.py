@@ -15,3 +15,15 @@ def new_ticket(sender, **kwargs):
 			
 		if t.submitter_email:
 			send_templated_email('new_ticket_owner', context, recipients=t.submitter_email, sender=t.queue.email_address, fail_silently=True)
+			
+def new_followup(sender, **kwargs):
+	if kwargs['created']:
+		f = kwargs['instance']
+		
+		context = {
+			'ticket': f.ticket
+			'queue': f.ticket.queue,
+		}
+		
+		if f.submitter_email:
+			send_templated_email('new_followup', context, recipients=t.submitter_email, sender=t.queue.email_address, fail_silently=True)

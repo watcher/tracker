@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.conf import settings
 from tracker.lib import unique_slugify
 from tracker.managers import FollowUpManager
-from tracker.signals import new_ticket
+from tracker.signals import new_ticket, new_followup
 import hashlib
 import os
 
@@ -179,3 +179,4 @@ class EmailTemplate(models.Model):
 		ordering = ['name']
 		
 models.signals.post_save.connect(new_ticket, sender=Ticket)
+models.signals.post_save.connect(new_followup, sender=FollowUp)
