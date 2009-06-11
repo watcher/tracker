@@ -1,7 +1,7 @@
 from django.core.mail import send_mail
 from tracker.lib import send_templated_email
 
-def new_ticket_cc(sender, **kwargs):
+def new_ticket(sender, **kwargs):
 	if kwargs['created']:
 		t = kwargs['instance']
 		
