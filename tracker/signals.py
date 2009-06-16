@@ -21,7 +21,7 @@ def new_followup(sender, **kwargs):
 		f = kwargs['instance']
 		
 		context = {
-			'ticket': f.ticket
+			'ticket': f.ticket,
 			'queue': f.ticket.queue,
 		}
 		
