@@ -7,7 +7,7 @@ from django.contrib.sites.models import RequestSite, Site
 import os
 import re
 
-def response(request, template, dictionary, *args, **kwargs):
+def response(request, template, dictionary={}, *args, **kwargs):
 	kwargs['context_instance'] = RequestContext(request)
 	
 	dictionary['site'] = _get_site_name(request)
