@@ -6,42 +6,36 @@
 		<title>Tracker - {{ site|capfirst }}</title>
 		
 		<!-- CSS -->
-		<link rel="stylesheet" href="{{ MEDIA_URL }}css/base.css" type="text/css" media="screen" title="CSS" charset="utf-8" />
+		<link rel="stylesheet" href="{{ MEDIA_URL }}css/default.css" type="text/css" media="screen" title="CSS" charset="utf-8" />
 		
 		<!-- Extra head content can come here -->
 		{% block head %}{% endblock %}
 	</head>
-
+	
 	<body>
-		<div id="wrapper">
-			<div id="header">
-				<div id="tracker"><a href="{% url tracker-public-index %}">Issue tracker</a></div>
-				
-				<div id="sitename">{{ site }}</div>
-				
-				<div id="search">
-					{% block search %}{% endblock %}
-					
-					<!-- <form method="post" action="#">
-						<input type="text" name="search" id="s" />
-						<input type="submit" name="submit" value="search" id="x" />
-					</form> -->
+		<div id="header">
+			<h1>Tracker</h1>
+			<h2>{{ site }}</h2>
+		</div>
+		
+		<div id="menu">
+			{% block menu %}{% endblock %}
+			
+			<div></div>
+		</div>
+		
+		<div id="container">
+			<div id="primarycontainer">
+				<div id="primarycontent">
+					{% block content %}{% endblock %}
 				</div>
-				
-				<div style="clear:both;"></div>
 			</div>
 			
-			<div id="menu">
-				{% block menu %}{% endblock %}
-			</div>
-			
-			<div id="content">
-				{% block content %}{% endblock %}
-			</div>
-			
-			<div id="footer">
-				&copy; {% now "Y" %} - <a href="http://github.com/watcher/tracker/">Tracker</a> by Bernard 'watcher' Siebens 
-			</div>
+			<div class="clearit"></div>
+		</div>
+		
+		<div id="footer">
+			&copy; {% now "Y" %} - <a href="http://github.com/watcher/tracker">Tracker</a> by Bernard Siebens
 		</div>
 	</body>
 </html>
