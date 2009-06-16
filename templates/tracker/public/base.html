@@ -3,8 +3,15 @@
 {% block menu %}
 	<ul>
 		<li id="first" class="active"><a href="{% url tracker-public-index %}">add a new ticket</a></li>
-		<li><a href="{% url tracker-public-find-ticket %}">find a ticket</li>
-		<li><a href="{% url tracker-public-browse-tickets %}">browse all tickets</a></li>
-		<li><a href="{% url login %}">login</a></li>
+		<li id="second"><a href="{% url tracker-public-find-ticket %}">find a ticket</a></li>
+		<li id="third"><a href="{% url tracker-public-browse-tickets %}">browse all tickets</a></li>
+		<li id="fourth"><a href="{% url login %}">login</a></li>
 	</ul>
+	
+	<script type="text/javascript" charset="utf-8">
+		function makeActive(id) {
+			$(".active").removeClass("active");
+			$("#" + id).addClass("active");
+		}
+	</script>
 {% endblock %}
