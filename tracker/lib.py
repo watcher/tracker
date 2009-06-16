@@ -2,7 +2,7 @@ from django.template.defaultfilters import slugify
 from django.conf import settings
 from django.core.mail import EmailMessage
 from django.template import loader, Context, RequestContext
-from django.shorcuts import render_to_response
+from django.shortcuts import render_to_response
 from django.contrib.sites.models import RequestSite, Site
 import os
 import re
