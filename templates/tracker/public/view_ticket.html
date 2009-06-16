@@ -3,6 +3,10 @@
 {% load form_tags %}
 
 {% block content %}
+	<script type="text/javascript" charset="utf-8">
+		makeActive("none");
+	</script>
+
 	<h1>Ticket n&deg;{{ ticket.id }}. {{ ticket.title }} [{{ ticket.get_status|lower }}]</h1>
 	
 	<table width="100%" class="ticketdetails">
