@@ -1,9 +1,27 @@
 from django.template.defaultfilters import slugify
 from django.conf import settings
 from django.core.mail import EmailMessage
-from django.template import loader, Context
+from django.template import loader, Context, RequestContext
+from django.shorcuts import render_to_response
+from django.contrib.sites.models import RequestSite, Site
 import os
 import re
+
+def response(request, template, dictionary, *args, **kwargs):
+	kwargs['context_instance'] = RequestContext(request)
+	
+	dictionary['site'] = _get_site_name(request)
+	
+	return render_to_response(template, dictionary, *args, **kwargs)
+	
+def _get_site_name(request):
+	try:
+		return Site.objects.get(pk=settings.SITE_ID).name
+	except:
+		try:
+			return settings.SITE_NAME
+		except:
+			return RequestSite(request).name
 
 def send_templated_email(template_name, email_context, recipients, sender=None, bcc=None, fail_silently=False, files=None):
 	from tracker.models import EmailTemplate
