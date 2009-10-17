@@ -1,0 +1,49 @@
+/*	
+	Primo Admin
+	Stefano Giliberti, kompulsive@gmail.com - lessbit.com
+*/
+
+/*	Whatever:hover - http://www.xs4all.nl/~peterned/csshover.html */
+body {
+   behavior: url("css/csshover3.htc");
+}
+
+/* Transparency */
+* html #head h1#logo  { 
+    background-image: none;
+	filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src="images/logo.png", sizingMethod="crop"); 	        
+}
+* html .close  { 
+    background-image: none;
+	filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src="images/close.png", sizingMethod="crop"); 	        
+}
+* html #sub-menu ul li.current a  { 
+    background-image: none;
+	filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src="images/sub-mi_active.png", sizingMethod="scale")	        
+}
+
+/* Magic disappearing */
+#sub-menu h3, .kubrick, .kubrick .top, #footer {
+	position: relative;
+}
+
+/* Extra padding */
+ul#navigation li a, ul.tabs li a, #sub-menu ul li a, .kubrick.onethird {
+	display: inline;
+}
+
+/* Hover font color */
+ul#navigation .current a:hover, ul.tabs li a.selected:hover { 
+	color: #FFF;
+}
+ul.tabs li a:hover { 
+	color: #919191;
+}
+
+/* Re-align */
+#content .corner { 
+	left: -35px;
+}
+#content .close { 
+	left: -25px;
+}
