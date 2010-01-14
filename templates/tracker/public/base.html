@@ -1,1 +1,14 @@
 {% extends "tracker/base.html" %}
+
+{% block menu %}
+	<ul>
+		<li id="first" class="active"><a href="{% url tracker_public_index %}">Home</a></li>
+	</ul>
+	
+	<script type="text/javascript" charset="utf-8">
+		function makeActive(id) {
+			$(".active").removeClass("active");
+			$("#" + id).addClass("active");
+		}
+	</script>
+{% endblock %}
